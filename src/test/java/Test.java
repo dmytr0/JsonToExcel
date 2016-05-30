@@ -11,7 +11,7 @@ public class Test {
         String json = "{\n" +
                 "  \"visitor\": {\n" +
                 "    \"images\": [\n" +
-                "      \"https://pp.vk.me/c7003/v7003978/1ed9/yoeGXOWmW-M.jpg\",\n" +
+                "      \"https://pp.vk.me/c7003/v7003978/1ed9/yoeGXOWmW-M\",\n" +
                 "      \"https://cs7058.vk.me/c540107/v540107859/2db60/Db-kBdt2GJQ.jpg\",\n" +
                 "\t  \"https://pp.vk.me/c7011/v7011852/40bb5/w-sRUUGU4ik.jpg\"\n" +
                 "    ],\n" +

@@ -201,23 +201,22 @@ public class Excel {
             URL oracle = new URL(url);
             is = oracle.openStream();
             bytes = IOUtils.toByteArray(is);
+            int pictureIdx = wb.addPicture(bytes, Workbook.PICTURE_TYPE_JPEG);
+            CreationHelper helper = wb.getCreationHelper();
+            Drawing drawing = visitor.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+            anchor.setCol1(4);
+            anchor.setRow1(2);
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            pict.resize(3,11);
+            if(is!= null) {
+                is.close();
+            }
         }
         catch (IOException e) {
             System.err.println("Invalid pictures! " + e);
         }
-        int pictureIdx = wb.addPicture(bytes, Workbook.PICTURE_TYPE_JPEG);
-        try {
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        CreationHelper helper = wb.getCreationHelper();
-        Drawing drawing = visitor.createDrawingPatriarch();
-        ClientAnchor anchor = helper.createClientAnchor();
-        anchor.setCol1(4);
-        anchor.setRow1(2);
-        Picture pict = drawing.createPicture(anchor, pictureIdx);
-        pict.resize(3,11);
+
     }
     public void setParametr(String param, String value){
         if(!"Occupation".equals(param)){
