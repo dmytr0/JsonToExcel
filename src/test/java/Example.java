@@ -1,14 +1,21 @@
+import org.junit.Test;
 import xyz.dimonick.JsonToXls.POJO.Visitor;
 import xyz.dimonick.JsonToXls.Tools.DB.VisitorStorage;
 import xyz.dimonick.JsonToXls.Tools.Excel.VisitorToExcel;
 import xyz.dimonick.JsonToXls.Tools.Json.JSONConverter;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.SQLException;
 
-public class Test {
+public class Example {
 
-    public static void main(String[] args) {
+
+    @Test
+    // Demostration of work
+    public void main() {
 
         String json = read("src//test//resources//json.txt");
         if(json != null) {
