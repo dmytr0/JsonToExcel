@@ -98,12 +98,6 @@ public class VisitorStorage {
                 }
 
             }
-            if(stmntOccupation != null) {
-                stmntOccupation.close();
-            }
-            if(stmntVisitorOccupation!= null) {
-                stmntVisitorOccupation.close();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
