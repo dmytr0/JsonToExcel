@@ -25,13 +25,11 @@ public class VisitorStorage {
     // Save data to visitor table
     private void saveVisitor(){
 
-        try{
-            PreparedStatement preparedStatement = null;
-            String insertVisitor = "INSERT INTO visitors (firstname, lastname, macaddress, gender, dateofbirth, email, phone," +
-                    " country, city, devicetype, os, vkid, facebookid, comment)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ;";
-
-            preparedStatement = connection.prepareStatement(insertVisitor, Statement.RETURN_GENERATED_KEYS);
+        String insertVisitor = "INSERT INTO visitors (firstname, lastname, macaddress, gender, dateofbirth, email, phone," +
+                " country, city, devicetype, os, vkid, facebookid, comment)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ;";
+        try(PreparedStatement preparedStatement =
+                    connection.prepareStatement(insertVisitor, Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, visitor.getFirstName());
             preparedStatement.setString(2, visitor.getLastName());
             preparedStatement.setString(3, visitor.getMacAddress());
@@ -54,9 +52,6 @@ public class VisitorStorage {
             else {
                 throw new SQLException("Creating visitor failed, no ID obtained.");
             }
-            if(preparedStatement != null) {
-                preparedStatement.close();
-            }
         } catch (SQLException e) {
             System.err.println("SQL error! " + e);
         }
@@ -66,16 +61,11 @@ public class VisitorStorage {
     private void saveImages(){
 
         String insertImages = "INSERT INTO images (visitor_id, url) VALUES (?, ?);";
-        PreparedStatement preparedStatement = null;
-        try{
-            preparedStatement = connection.prepareStatement(insertImages);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(insertImages)){
             for (int i = 0; i < visitor.getImages().size(); i++){
                 preparedStatement.setLong(1, visitor.getId());
                 preparedStatement.setString(2, visitor.getImages().get(i));
                 preparedStatement.executeUpdate();
-            }
-            if(preparedStatement != null) {
-                preparedStatement.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,13 +79,11 @@ public class VisitorStorage {
                 "VALUES (?) ; ";
         String insertVisitorOccupation = "INSERT INTO visitor_occupation (visitor_id, occupation_id)\n" +
                 "VALUES (?, ?) ;";
-        PreparedStatement stmntOccupation = null;
-        PreparedStatement stmntVisitorOccupation = null;
-        try{
-            stmntOccupation = connection.prepareStatement(insertOccupation, Statement.RETURN_GENERATED_KEYS);
-            stmntVisitorOccupation = connection.prepareStatement(insertVisitorOccupation);
-            for(int i = 0; i < visitor.getOccupation().size(); i++) {
 
+        try(PreparedStatement stmntOccupation =
+                    connection.prepareStatement(insertOccupation, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmntVisitorOccupation = connection.prepareStatement(insertVisitorOccupation)){
+            for(int i = 0; i < visitor.getOccupation().size(); i++) {
                 stmntOccupation.setString(1, visitor.getOccupation().get(i));
                 stmntOccupation.executeUpdate();
                 ResultSet generatedKeys = stmntOccupation.getGeneratedKeys();
