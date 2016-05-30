@@ -17,9 +17,9 @@ public class VisitorStorage {
         this.visitor = visitor;
         getConnection();
         saveVisitor();
-
         saveImages();
         saveOccupation();
+        closeConnection();
     }
 
     // Save data to visitor table
@@ -54,6 +54,9 @@ public class VisitorStorage {
             else {
                 throw new SQLException("Creating visitor failed, no ID obtained.");
             }
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         } catch (SQLException e) {
             System.err.println("SQL error! " + e);
         }
@@ -71,7 +74,9 @@ public class VisitorStorage {
                 preparedStatement.setString(2, visitor.getImages().get(i));
                 preparedStatement.executeUpdate();
             }
-
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -105,6 +110,12 @@ public class VisitorStorage {
                 }
 
             }
+            if(stmntOccupation != null) {
+                stmntOccupation.close();
+            }
+            if(stmntVisitorOccupation!= null) {
+                stmntVisitorOccupation.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -116,6 +127,15 @@ public class VisitorStorage {
         String password = "1111";
         Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(url, name, password);
+    }
+    private void closeConnection(){
+        if(connection != null){
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Connection is not closed! " + e);
+            }
+        }
     }
 
 }
